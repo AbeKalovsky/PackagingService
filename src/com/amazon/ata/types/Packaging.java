@@ -1,7 +1,6 @@
 package com.amazon.ata.types;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Represents a packaging option.
