@@ -1,0 +1,47 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+'abstract class AbstractList
+'abstract AbstractCollection
+'interface List
+'interface Collection
+'
+'List <|-- AbstractList
+'Collection <|-- AbstractCollection
+'
+'Collection <|- List
+'AbstractCollection <|- AbstractList
+'AbstractList <|-- ArrayList
+
+class Packaging {
+    -Material material
+    +getMaterial()
+    +canFitItem()
+    +equals()
+    +hashCode()
+    +getMass()
+}
+
+class PolyBag {
+    -BigDecimal volume
+    +canFitItem()
+    +getMass()
+}
+
+class Box {
+    -BigDecimal length
+    -BigDecimal width
+    -BigDecimal height
+    +canFitItem()
+    +getMass()
+}
+
+enum Material {
+    LAMINATED_PLASTIC
+    CORRUGATE
+}
+
+Box --|> Packaging
+PolyBag --|> Packaging
+Packaging --> Material
+@enduml
