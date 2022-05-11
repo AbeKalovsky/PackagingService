@@ -114,6 +114,6 @@ public class Packaging {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMaterial());
+        return 0;
     }
 }
