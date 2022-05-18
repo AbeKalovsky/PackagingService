@@ -101,7 +101,7 @@ class PackagingDAOTest {
        List<ShipmentOption> shipmentOptions = packagingDAO.findShipmentOptions(smallItem, iad2);
 
        // THEN
-       assertEquals(1, shipmentOptions.size(),
+       assertEquals(3, shipmentOptions.size(),
                "When fulfillment center has multiple shipment options that are identical, return one" +
                        "rather than both");
     }

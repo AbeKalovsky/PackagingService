@@ -57,19 +57,13 @@ public class PackagingDAO {
 
         // Check all FcPackagingOptions for a suitable Packaging in the given FulfillmentCenter
         List<ShipmentOption> result = new ArrayList<>();
-        boolean fcFound = false;
-//        for (FulfillmentCenter center : fcPackagingOptions.keySet()) {
+//        boolean fcFound = false;
         if (fcPackagingOptions.get(fulfillmentCenter) == null) {
-            throw new UnknownFulfillmentCenterException();
+            throw new UnknownFulfillmentCenterException(
+                    String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));
         }
             for (FcPackagingOption option : fcPackagingOptions.get(fulfillmentCenter)) {
                 Packaging packaging = option.getPackaging();
-
-//            Packaging packaging = fcPackagingOption.getPackaging();
-//            String fcCode = fcPackagingOption.getFulfillmentCenter().getFcCode();
-
-//                if (fcCode.equals(fulfillmentCenter.getFcCode())) {
-//                    fcFound = true;
                     if (packaging.canFitItem(item)) {
                         result.add(ShipmentOption.builder()
                                 .withItem(item)
@@ -77,22 +71,23 @@ public class PackagingDAO {
                                 .withFulfillmentCenter(fulfillmentCenter)
                                 .build());
                     }
-//                }
-//            }
-                    fcFound = true;
+
+
             // Notify caller about unexpected results
-            if (!fcFound) {
-                throw new UnknownFulfillmentCenterException(
-                        String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));
+
+
+//                if (!fcFound) {
+//                throw new UnknownFulfillmentCenterException(
+//                        String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));
+//            }
+
+                if (result.isEmpty()) {
+                    throw new NoPackagingFitsItemException(
+                            String.format("No packaging at %s fits %s!", fulfillmentCenter.getFcCode(), item));
+                }
+
+
             }
-
-            if (result.isEmpty()) {
-                throw new NoPackagingFitsItemException(
-                        String.format("No packaging at %s fits %s!", fulfillmentCenter.getFcCode(), item));
-            }
-
-
-        }
         return result;
     }
 

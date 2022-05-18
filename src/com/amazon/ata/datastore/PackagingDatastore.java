@@ -23,8 +23,8 @@ public class PackagingDatastore {
             createFcPackagingOption("YOW4", Material.CORRUGATE, "60", "60", "60"),
             createFcPackagingOption("IAD2", Material.CORRUGATE, "20", "20", "20"),
             createFcPackagingOption("IAD2", Material.CORRUGATE, "20", "20", "20"),
-//            createFcPackagingOption("IAD2", Material.LAMINATED_PLASTIC, "2,000cc"),
-//            createFcPackagingOption("IAD2", Material.LAMINATED_PLASTIC, "10,000cc"),
+            createFcPackagingOption("IAD2", Material.LAMINATED_PLASTIC, "2000"),
+            createFcPackagingOption("IAD2", Material.LAMINATED_PLASTIC, "10000"),
             createFcPackagingOption("PDX1", Material.CORRUGATE, "40", "40", "40"),
             createFcPackagingOption("PDX1", Material.CORRUGATE, "60", "60", "60"),
             createFcPackagingOption("PDX1", Material.CORRUGATE, "60", "60", "60")
@@ -33,6 +33,7 @@ public class PackagingDatastore {
     /**
      * Create fulfillment center packaging option from provided parameters.
      */
+
     private FcPackagingOption createFcPackagingOption(String fcCode, Material material,
                                                       String length, String width, String height) {
         FulfillmentCenter fulfillmentCenter = new FulfillmentCenter(fcCode);
@@ -42,12 +43,12 @@ public class PackagingDatastore {
         return new FcPackagingOption(fulfillmentCenter, packaging);
     }
 
-//    private FcPackagingOption createFcPackagingOption (String fcCode, Material material, String volume) {
-//        FulfillmentCenter fulfillmentCenter = new FulfillmentCenter(fcCode);
-//        Packaging packaging = new PolyBag(new BigDecimal(volume));
-//
-//        return new FcPackagingOption(fulfillmentCenter, packaging);
-//    }
+    private FcPackagingOption createFcPackagingOption (String fcCode, Material material, String volume) {
+        FulfillmentCenter fulfillmentCenter = new FulfillmentCenter(fcCode);
+        Packaging packaging = new PolyBag(material, new BigDecimal(volume));
+
+        return new FcPackagingOption(fulfillmentCenter, packaging);
+    }
 
     public List<FcPackagingOption> getFcPackagingOptions() {
         return fcPackagingOptions;
