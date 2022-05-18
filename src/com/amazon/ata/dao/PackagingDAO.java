@@ -64,30 +64,31 @@ public class PackagingDAO {
         }
             for (FcPackagingOption option : fcPackagingOptions.get(fulfillmentCenter)) {
                 Packaging packaging = option.getPackaging();
-                    if (packaging.canFitItem(item)) {
-                        result.add(ShipmentOption.builder()
-                                .withItem(item)
-                                .withPackaging(packaging)
-                                .withFulfillmentCenter(fulfillmentCenter)
-                                .build());
-                    }
+                if (packaging.canFitItem(item)) {
+                    result.add(ShipmentOption.builder()
+                            .withItem(item)
+                            .withPackaging(packaging)
+                            .withFulfillmentCenter(fulfillmentCenter)
+                            .build());
+                }
 
 
-            // Notify caller about unexpected results
+                // Notify caller about unexpected results
 
 
 //                if (!fcFound) {
 //                throw new UnknownFulfillmentCenterException(
 //                        String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));
 //            }
-
-                if (result.isEmpty()) {
-                    throw new NoPackagingFitsItemException(
-                            String.format("No packaging at %s fits %s!", fulfillmentCenter.getFcCode(), item));
-                }
-
-
             }
+
+            if (result.isEmpty()) {
+                throw new NoPackagingFitsItemException(
+                        String.format("No packaging at %s fits %s!", fulfillmentCenter.getFcCode(), item));
+            }
+
+
+
         return result;
     }
 
@@ -108,3 +109,6 @@ public class PackagingDAO {
         return Objects.hash(fcPackagingOptions);
     }
 }
+
+
+

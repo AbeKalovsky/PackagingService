@@ -21,14 +21,19 @@ public class PolyBag extends Packaging {
 
     @Override
     public BigDecimal getMass() {
-        double part = Math.ceil(Math.sqrt(volume.doubleValue() * 0.6));
-        BigDecimal result = BigDecimal.valueOf(part);
-     return result;
+        BigDecimal mass = BigDecimal.valueOf(Math.ceil(Math.sqrt(volume.doubleValue()) * .6));
+//        double part = Math.ceil(Math.sqrt(volume.doubleValue() * 0.6));
+//        BigDecimal result = BigDecimal.valueOf(part);
+     return mass;
+    }
+
+    public BigDecimal getVolume() {
+        return volume;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMaterial(), getMass());
+        return Objects.hash(getMaterial(), getVolume());
     }
 }
 

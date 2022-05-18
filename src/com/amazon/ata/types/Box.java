@@ -47,11 +47,11 @@ public class Box extends Packaging {
         BigDecimal two = BigDecimal.valueOf(2);
 
         // For simplicity, we ignore overlapping flaps
-        BigDecimal endsArea = length.multiply(width).multiply(two);
-        BigDecimal shortSidesArea = length.multiply(height).multiply(two);
-        BigDecimal longSidesArea = width.multiply(height).multiply(two);
+        BigDecimal endsArea = length.multiply(width).multiply(two); //400
+        BigDecimal shortSidesArea = length.multiply(height).multiply(two); //200
+        BigDecimal longSidesArea = width.multiply(height).multiply(two); //400
 
-        return endsArea.add(shortSidesArea).add(longSidesArea);
+        return endsArea.add(shortSidesArea).add(longSidesArea); //1000
     }
 
     @Override
