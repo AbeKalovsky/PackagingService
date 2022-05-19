@@ -20,8 +20,8 @@ public class WeightedCostStrategy implements CostStrategy {
     public ShipmentCost getCost(ShipmentOption shipmentOption) {
         ShipmentCost monetaryCostStrategyCost = monetaryCostStrategy.getCost(shipmentOption);
         ShipmentCost carbonCostStrategyCost = carbonCostStrategy.getCost(shipmentOption);
-        BigDecimal weightedCost = (monetaryCostStrategyCost.getCost().multiply(BigDecimal.valueOf(.8))).add
-                ((carbonCostStrategyCost.getCost().multiply(BigDecimal.valueOf(.2))));
+        BigDecimal weightedCost = (monetaryCostStrategyCost.getCost().multiply(BigDecimal.valueOf(.8))).add(
+                carbonCostStrategyCost.getCost().multiply(BigDecimal.valueOf(.2)));
         return new ShipmentCost(shipmentOption, weightedCost);
     }
 }
