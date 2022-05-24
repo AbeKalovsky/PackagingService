@@ -73,13 +73,6 @@ public class PackagingDAO {
                 }
 
 
-                // Notify caller about unexpected results
-
-
-//                if (!fcFound) {
-//                throw new UnknownFulfillmentCenterException(
-//                        String.format("Unknown FC: %s!", fulfillmentCenter.getFcCode()));
-//            }
             }
 
             if (result.isEmpty()) {

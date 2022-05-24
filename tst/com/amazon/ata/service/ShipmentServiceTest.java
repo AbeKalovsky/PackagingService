@@ -1,5 +1,6 @@
 package com.amazon.ata.service;
 
+import com.amazon.ata.cost.CostStrategy;
 import com.amazon.ata.cost.MonetaryCostStrategy;
 import com.amazon.ata.dao.PackagingDAO;
 import com.amazon.ata.datastore.PackagingDatastore;
@@ -7,13 +8,24 @@ import com.amazon.ata.exceptions.NoPackagingFitsItemException;
 import com.amazon.ata.exceptions.UnknownFulfillmentCenterException;
 import com.amazon.ata.types.FulfillmentCenter;
 import com.amazon.ata.types.Item;
+import com.amazon.ata.types.ShipmentCost;
 import com.amazon.ata.types.ShipmentOption;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class ShipmentServiceTest {
 
@@ -34,21 +46,54 @@ class ShipmentServiceTest {
     private FulfillmentCenter existentFC = new FulfillmentCenter("ABE2");
     private FulfillmentCenter nonExistentFC = new FulfillmentCenter("NonExistentFC");
 
-    private ShipmentService shipmentService = new ShipmentService(new PackagingDAO(new PackagingDatastore()),
-            new MonetaryCostStrategy());
+    @InjectMocks
+    private ShipmentService shipmentService;
+
+    @Mock
+    private PackagingDAO packagingDAO;
+
+    @Mock
+    private CostStrategy costStrategy;
+
+    @BeforeEach
+    void setUp() {
+        openMocks(this);
+    }
 
     @Test
-    void findBestShipmentOption_existentFCAndItemCanFit_returnsShipmentOption() {
-        // GIVEN & WHEN
-        ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, existentFC);
+    void findBestShipmentOption_existentFCAndItemCanFit_returnsShipmentOption() throws UnknownFulfillmentCenterException, NoPackagingFitsItemException {
 
+
+        // GIVEN
+        List<ShipmentOption> shipmentOptionList = new ArrayList<>();
+        ShipmentOption option = ShipmentOption.builder().withItem(smallItem)
+                .withFulfillmentCenter(existentFC)
+                .build();
+        ShipmentCost cost = new ShipmentCost(option, BigDecimal.valueOf(5));
+        shipmentOptionList.add(option);
+        when(costStrategy.getCost(option)).thenReturn(cost);
+        when(packagingDAO.findShipmentOptions(any(Item.class), any(FulfillmentCenter.class))).thenReturn(shipmentOptionList);
+
+
+
+        // WHEN
+        ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, existentFC);
         // THEN
         assertNotNull(shipmentOption);
     }
 
     @Test
-    void findBestShipmentOption_existentFCAndItemCannotFit_returnsShipmentOption() {
-        // GIVEN & WHEN
+    void findBestShipmentOption_existentFCAndItemCannotFit_returnsShipmentOption() throws UnknownFulfillmentCenterException, NoPackagingFitsItemException {
+        // GIVEN
+        List<ShipmentOption> shipmentOptionList = new ArrayList<>();
+        ShipmentOption option = ShipmentOption.builder().withItem(largeItem)
+                .withFulfillmentCenter(existentFC)
+                .build();
+        ShipmentCost cost = new ShipmentCost(option, BigDecimal.valueOf(5));
+        shipmentOptionList.add(option);
+        when(costStrategy.getCost(option)).thenReturn(cost);
+        when(packagingDAO.findShipmentOptions(any(Item.class), any(FulfillmentCenter.class))).thenReturn(shipmentOptionList);
+        // WHEN
         ShipmentOption shipmentOption = shipmentService.findShipmentOption(largeItem, existentFC);
 
         // THEN
