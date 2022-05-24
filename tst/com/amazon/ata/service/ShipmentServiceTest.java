@@ -66,7 +66,8 @@ class ShipmentServiceTest {
 
         // GIVEN
         List<ShipmentOption> shipmentOptionList = new ArrayList<>();
-        ShipmentOption option = ShipmentOption.builder().withItem(smallItem)
+        ShipmentOption option = ShipmentOption.builder()
+                .withItem(smallItem)
                 .withFulfillmentCenter(existentFC)
                 .build();
         ShipmentCost cost = new ShipmentCost(option, BigDecimal.valueOf(5));
@@ -101,10 +102,9 @@ class ShipmentServiceTest {
     }
 
     @Test
-    void findBestShipmentOption_nonExistentFCAndItemCanFit_throwsRuntimeException() {
+    void findBestShipmentOption_nonExistentFCAndItemCanFit_throwsRuntimeException() throws UnknownFulfillmentCenterException, NoPackagingFitsItemException {
         // GIVEN & WHEN
-//        ShipmentOption shipmentOption = shipmentService.findShipmentOption(smallItem, nonExistentFC);
-
+        when(packagingDAO.findShipmentOptions(smallItem, nonExistentFC)).thenThrow(UnknownFulfillmentCenterException.class);
         // THEN
         assertThrows(RuntimeException.class, () -> {
             shipmentService.findShipmentOption(smallItem, nonExistentFC);
@@ -112,10 +112,9 @@ class ShipmentServiceTest {
     }
 
     @Test
-    void findBestShipmentOption_nonExistentFCAndItemCannotFit_throwsRuntimeException() {
+    void findBestShipmentOption_nonExistentFCAndItemCannotFit_throwsRuntimeException() throws UnknownFulfillmentCenterException, NoPackagingFitsItemException {
         // GIVEN & WHEN
-//        ShipmentOption shipmentOption = shipmentService.findShipmentOption(largeItem, nonExistentFC);
-
+        when(packagingDAO.findShipmentOptions(largeItem, nonExistentFC)).thenThrow(UnknownFulfillmentCenterException.class);
         // THEN
         assertThrows(RuntimeException.class, () -> {
             shipmentService.findShipmentOption(largeItem, nonExistentFC);
